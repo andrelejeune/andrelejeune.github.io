@@ -18,6 +18,11 @@ h2 {text-align:center;}
   cursor: pointer;
   width: 100%;
 }
+input {
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+}
 </style>
 </head>
 <body>
@@ -25,7 +30,7 @@ h2 {text-align:center;}
 
 <h1>Test préfixes</h1>
 <h2>Quelle est la signification du préfixe :</h2>
-<div style="text-align: center;">
+<h2>
 	<output id="prefixe"></output> comme dans <output id="exemple"></output>
 	<br><br>
 	<table align=center>
@@ -36,9 +41,9 @@ h2 {text-align:center;}
 	<tr><td><input type="button" class="button" id="4" onclick = "setTimeout(function(){rep(4)},400)"></td></tr>
 	<tr><td><input type="button" class="button" id="5" onclick = "setTimeout(function(){rep(5)},400)"></td></tr>
 	</table>
-	<br><br>Score : <output id="réussi"></output> / <output id="total"></output>
-	<br><br>Erreurs : <output id="erreurs"></output>
-</div>
+	<br>Score : <output id="réussi"></output> / <output id="total"></output>
+	<br>Erreurs : <output id="erreurs"></output>
+</h2>
 
 <script>
 
