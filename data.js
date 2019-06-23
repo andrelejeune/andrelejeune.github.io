@@ -1371,7 +1371,7 @@ data = [
  },
  {
    "Prefixe": "rhino-",
-   "Sens": "nez",
+   "Sens": "nez (grec)",
    "Exemple": "rhinocéros"
  },
  {
