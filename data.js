@@ -731,7 +731,7 @@ data = [
  },
  {
    "Prefixe": "hydr(o)-",
-   "Sens": "eau, (fluide)",
+   "Sens": "eau (fluide)",
    "Exemple": "hydraulique, hydre, hydrologie, hydrothérapie"
  },
  {
@@ -1500,7 +1500,7 @@ data = [
    "Exemple": "stomatologie"
  },
  {
-   "Prefixe": "styl (o)-",
+   "Prefixe": "styl(o)-",
    "Sens": "colonne",
    "Exemple": "stylite"
  },
