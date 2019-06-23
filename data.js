@@ -1317,7 +1317,7 @@ data = [
  {
    "Prefixe": "pyél-",
    "Sens": "bassinet du rein",
-   "Exemple": "pyâ€‹élite"
+   "Exemple": "pyélite"
  },
  {
    "Prefixe": "pyo-",
