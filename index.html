@@ -28,7 +28,6 @@ appearance: none;
 <body>
 <script src="data.js"></script>
 
-<h1>Test préfixes</h1>
 <h2>Quelle est la signification du préfixe :</h2>
 <h2>
 	<output id="prefixe"></output> comme dans <output id="exemple"></output>
@@ -92,7 +91,17 @@ function nouvelleQ(){
 	quest.splice(quest.indexOf(questions[0]),1);
 	mrepSens = extractRand(quest,nbr_choix-1);
 	for (var i = 0; i < nbr_choix-1; i++) {
-		document.getElementById(mrep[i]).value = data[mrepSens[i]].Sens;
+		sens = data[mrepSens[i]].Sens;
+		// Éliminer les répétitions possible dans data
+		if (sens == data[questions[0]].Sens) {
+			sens = "bonus";
+		}
+		for (var j = 0; j < i; j++) {
+			if (sens == data[mrepSens[j]].Sens) {
+				sens = "bonus";
+			}
+		}
+		document.getElementById(mrep[i]).value = sens;
 	}
 }
 
