@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html>
+<head>
 <style>
 h1 {text-align:center;}
 h2 {text-align:center;}
-button 
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 2px 2px;
+  cursor: pointer;
+  width: 100%;
+}
 </style>
-
+</head>
+<body>
 <script src="data.js"></script>
 
 <h1>Test préfixes</h1>
@@ -13,16 +27,14 @@ button
 <div style="text-align: center;">
 	<output id="prefixe"></output> comme dans <output id="exemple"></output>
 	<br><br>
-	<input type="button" id="0" onclick = "setTimeout(function(){rep(0)},400);">    
-	<input type="button" id="1" onclick = "setTimeout(function(){rep(1)},400)">
-	<input type="button" id="2" onclick = "setTimeout(function(){rep(2)},400)">
-	<input type="button" id="3" onclick = "setTimeout(function(){rep(3)},400)">
-	<input type="button" id="4" onclick = "setTimeout(function(){rep(4)},400)">
-	<input type="button" id="5" onclick = "setTimeout(function(){rep(5)},400)">
-	<input type="button" id="6" onclick = "setTimeout(function(){rep(6)},400)">
-	<input type="button" id="7" onclick = "setTimeout(function(){rep(7)},400)">
-	<input type="button" id="8" onclick = "setTimeout(function(){rep(8)},400)">
-	<input type="button" id="9" onclick = "setTimeout(function(){rep(9)},400)">
+	<table align=center>
+	<tr><td style="min-width:300px"><input type="button" class="button" id="0" onclick = "setTimeout(function(){rep(0)},400);"></td></tr>
+	<tr><td><input type="button" class="button" id="1" onclick = "setTimeout(function(){rep(1)},400)"></td></tr>
+	<tr><td><input type="button" class="button" id="2" onclick = "setTimeout(function(){rep(2)},400)"></td></tr>
+	<tr><td><input type="button" class="button" id="3" onclick = "setTimeout(function(){rep(3)},400)"></td></tr>
+	<tr><td><input type="button" class="button" id="4" onclick = "setTimeout(function(){rep(4)},400)"></td></tr>
+	<tr><td><input type="button" class="button" id="5" onclick = "setTimeout(function(){rep(5)},400)"></td></tr>
+	</table>
 	<br><br>Score : <output id="réussi"></output> / <output id="total"></output>
 	<br><br>Erreurs : <output id="erreurs"></output>
 </div>
@@ -33,7 +45,7 @@ var questions = [];
 var score = 0;
 var erreurs = 0;
 var err = 0;
-const nbr_choix = 10;
+const nbr_choix = 6;
 const nbr_questions = data.length;
 // Pour debugger
 //const nbr_choix = 3;
@@ -147,7 +159,6 @@ function extractRand(array,n){
 	}	
 	return randArray;
 }
-</script>	
-		
-</body></html>		
-		
+</script>			
+</body>
+</html>
