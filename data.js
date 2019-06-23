@@ -27,7 +27,7 @@ data = [
  {
    "Prefixe": "adén-",
    "Sens": "glande, ganglion lymphatique",
-   "Exemple": "adénome, adénoà¯de"
+   "Exemple": "adénome, adénoïde"
  },
  {
    "Prefixe": "aéro-",
