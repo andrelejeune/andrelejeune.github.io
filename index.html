@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Page Title</title>
+
+<style>
+
+.audio { width: 900px; }
+
+.audio:focus {
+    outline: none;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+	cursor: pointer; /* "hand" cursor */
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+</style>
+</head>
+<body>
+
+<form name="addtext" onsubmit="download(this['file'].files[0].name.replace(/\.[^/.]+$/, '')+'.txt', this['text'].value, this)">
+
+Source mp3: <input type="file" name="file" id="file" />
+<br>
+<br>
+<input type="button" value="Ralentir" onClick=handleSlower() />
+<input type="button" value="Normal" onClick=handleNormal() />
+<input type="button" value="Acc&eacute;l&eacute;rer" onClick=handleFaster() />
+<input type="button" value="Marquer" onClick=handleMark("") />
+<br>
+<br>
+<audio id="audio" class="audio"
+    controls
+	    src="">
+        Your browser does not support the
+        <code>audio</code> element.
+</audio>
+<br>
+<br>
+<textarea id = "text" rows = "40" cols = "120"></textarea>
+<br>
+Source txt: <input type="file" name="textfile" id="textfile" />
+<input type="submit" value="Sauvegarder">
+
+<script>
+text = document.getElementById("text");
+text.value = localStorage.getItem("text");
+pauseAudioAt = 0;
+
+const fileElement = document.getElementById("file");
+fileElement.addEventListener("change", handleFile, false);
+function handleFile() {
+  freader = new FileReader();
+  freader.onload = function(e) {
+	  audio = document.getElementById("audio");
+      audio.src = e.target.result;
+  };
+  freader.readAsDataURL(this.files[0]);
+  audio.load();
+  document.addtext.name.value = this.files[0].name.replace(/\.[^/.]+$/, "");
+}
+
+const textElement = document.getElementById("textfile");
+textElement.addEventListener("change", handleTextFile, false);
+function handleTextFile() {
+	reader = new FileReader();
+	reader.onload = function (e) {
+		text = document.getElementById("text");
+    	text.value = e.target.result;
+	};
+	reader.readAsText(this.files[0]);
+}
+
+function handleFaster() {
+  audio = document.getElementById("audio");
+  audio.playbackRate = audio.playbackRate + 0.05;
+}
+function handleNormal() {
+  audio = document.getElementById("audio");
+  audio.playbackRate = 1;
+}
+function handleSlower() {
+  audio = document.getElementById("audio");
+  audio.playbackRate = audio.playbackRate - 0.05;
+}
+
+const zeroPad = (num, places) => String(num).padStart(places, '0')
+
+function handleMark(delimiter) {
+  audio = document.getElementById("audio");
+  now = Math.trunc(audio.currentTime);
+  minutes = Math.floor(now / 60);
+  seconds = now - minutes * 60;
+  text = document.getElementById("text");
+  str = text.value;
+  start = text.selectionStart;
+  scroll = text.scrollTop;
+  upto = str.substring(0, start);
+  after = str.substring(start, text.length);
+  marker = delimiter + "[" + minutes + ":" + zeroPad(seconds, 2)+ "]";
+  text.value = upto + marker + after;
+  text.selectionStart = start + marker.length;
+  text.selectionEnd = text.selectionStart;
+  text.scrollTop = scroll;
+}
+
+function marker2sec (marker) {
+	time = marker.match(/\[([0-9]*):([0-9]*)\]/);
+	min = time[1];
+	sec = time[2];
+	return min*60+sec*1;
+}
+
+const node = document.getElementById("text");
+node.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        text = document.getElementById("text");
+		str = text.value;
+		start = text.selectionStart;
+		scroll = text.scrollTop;
+	   	upto = str.substring(0, start);
+	    after = str.substring(start, text.length);
+		m = upto.match(/\n\[[0-9]*:[0-9]*\]$/);
+  		if (m) {
+			text.value = upto.substring(0, upto.length - m[0].length + 1) + after;
+			text.selectionStart = start - m[0].length + 1;
+			text.selectionEnd = text.selectionStart;
+			text.scrollTop = scroll;
+		    handleMark("");
+		}
+		else {
+		    handleMark("\n");			
+		}
+		if (e.preventDefault) e.preventDefault();
+		localStorage.setItem("text",text.value);
+    }
+    else if (e.key === "Escape") {
+        text = document.getElementById("text");
+		str = text.value;
+		start = text.selectionStart;
+		upto = str.substring(0, start);
+	    after = str.substring(start, text.length);
+		m = upto.match(/\[[0-9]*:[0-9]*\]/gm);
+  		if (m) {
+			secs = marker2sec(m[m.length-1]);
+			audio = document.getElementById("audio");
+			audio.currentTime = secs;
+		}
+		thisline = after.match(/.*\n/);
+		if (thisline) {
+			m = thisline[0].match(/\[[0-9]*:[0-9]*\]/);
+			if (m) {
+				pauseAudioAt = marker2sec(m[0]);
+			}
+		}
+		audio.play();
+    }
+});
+
+audio = document.getElementById("audio");
+audio.ontimeupdate = function() {
+	if (pauseAudioAt) {
+		currentTime = audio.currentTime;
+		if (currentTime > pauseAudioAt) {
+			audio.pause();
+			pauseAudioAt = 0;
+		}
+	}
+};
+
+audio.seeking = function() {
+	pauseAudioAt = 0;
+}
+
+function download(filename, text, obj) {
+  var pom = document.createElement('a');
+  pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  pom.setAttribute('download', filename);
+
+  pom.style.display = 'none';
+  document.body.appendChild(pom);
+
+  pom.click();
+
+  document.body.removeChild(pom);
+}
+</script>
+</body>
+</html>
